@@ -12,7 +12,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -29,7 +28,9 @@ public class AddressbookEditor extends Composite {
 	Button editButton = new Button("Edit");
 	Button deleteButton = new Button("Delete");
 	Button newButton = new Button("New");
-	FlowPanel form = new FlowPanel();
+	HorizontalPanel form = new HorizontalPanel();
+	VerticalPanel formL = new VerticalPanel();
+	VerticalPanel formR = new VerticalPanel();
 	TextBox firstName = new TextBox();
 	TextBox lastName = new TextBox();
 	TextBox phoneNumber = new TextBox();
@@ -57,6 +58,7 @@ public class AddressbookEditor extends Composite {
 		layout.add(tableActions);
 		layout.add(form);
 		layout.add(formActions);
+		layout.setSpacing(8);
 
 		addressList.setWidth("600px"); // TODO 100% width
 		addressList.setHeight("320px"); // TODO 15 lines high
@@ -68,14 +70,20 @@ public class AddressbookEditor extends Composite {
 		// Alignment.MIDDLE_RIGHT);
 
 		form.setWidth("100%");
-		form.add(new Label("First Name"));
-		form.add(firstName);
-		form.add(new Label("Last Name"));
-		form.add(lastName);
-		form.add(new Label("Phone Number"));
-		form.add(phoneNumber);
-		form.add(new Label("Email Address"));
-		form.add(emailAddress);
+		formL.setWidth("100%");
+		formR.setWidth("100%");
+		formL.setSpacing(8);
+		formR.setSpacing(8);
+		form.add(formL);
+		form.add(formR);
+		formL.add(new Label("First Name"));
+		formL.add(firstName);
+		formR.add(new Label("Last Name"));
+		formR.add(lastName);
+		formL.add(new Label("Phone Number"));
+		formL.add(phoneNumber);
+		formR.add(new Label("Email Address"));
+		formR.add(emailAddress);
 
 		firstName.setWidth("100%");
 		lastName.setWidth("100%");

@@ -8,5 +8,20 @@
   /* Include all the styles from the reindeer theme */
   @include reindeer;
 
-  /* Insert your theme rules here */
+
+   button.v-nativebutton-menubutton.menubutton {
+		height: 3em;
+		font-size: large;
+		border: 0;
+		background-image: -webkit-gradient( linear, left top, left bottom, color-stop(0, #300452), color-stop(0.73, #4C689C), color-stop(0.93, #B9C5D9) );
+		background-image: -o-linear-gradient(bottom, #300452 0%, #4C689C 73%, #B9C5D9 93%);
+		background-image: -moz-linear-gradient(bottom, #300452 0%, #4C689C 73%, #B9C5D9 93%);
+		background-image: -webkit-linear-gradient(bottom, #300452 0%, #4C689C 73%, #B9C5D9 93%);
+		background-image: -ms-linear-gradient(bottom, #300452 0%, #4C689C 73%, #B9C5D9 93%);
+		background-image: linear-gradient(to bottom, #300452 0%, #4C689C 73%, #B9C5D9 93%);
+		color: white;
+		border-bottom: 4px solid white;
+		border-right: 0.5px solid white;
+	}
+
 }

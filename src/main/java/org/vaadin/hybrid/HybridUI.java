@@ -1,5 +1,11 @@
 package org.vaadin.hybrid;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.annotation.WebServlet;
 
 import org.vaadin.hybrid.gwtrpc.ClientSideAddressbookGWTRPCView;
@@ -15,6 +21,7 @@ import com.vaadin.navigator.ViewDisplay;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedHttpSession;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
@@ -61,12 +68,15 @@ public class HybridUI extends UI {
 		buttonBar.setWidth("100%");
 
 		exampleLayout.setWidth("100%");
+		exampleLayout.setMargin(true);
+		exampleLayout.setSpacing(true);
 		HomeView firstView = new HomeView();
 		exampleLayout.addComponent(firstView);
 		exampleLayout.setExpandRatio(firstView, 1);
 		exampleLayout.addComponent(exampleDescription);
 
 		exampleDescription.setWidth("300px");
+		exampleDescription.setContentMode(ContentMode.HTML);
 
 	}
 
@@ -77,16 +87,42 @@ public class HybridUI extends UI {
 				exampleLayout.replaceComponent(exampleLayout.getComponent(0),
 						(Component) view);
 				exampleLayout.setExpandRatio((Component) view, 1);
+
+				showDescription(view.getClass());
 			}
 		});
 
 		navigator.addView("", HomeView.class);
 		addView("server", "Server-side", AddressbookEditor.class);
-		addView("client-gwtrpc", "Client-side GWT-RPC", ClientSideAddressbookGWTRPCView.class);
-		addView("client-vaadinrpc", "Client-side Vaadin-RPC",
-				UnimplementedView.class);
-		addView("offline", "Offline", UnimplementedView.class);
+		addView("client-gwtrpc", "Client-side GWT-RPC",
+				ClientSideAddressbookGWTRPCView.class);
+	}
 
+	private void showDescription(Class<? extends View> viewClass) {
+		InputStream is = getClass().getResourceAsStream(
+				"descriptions/" + viewClass.getName() + ".html");
+		if (is == null) {
+			exampleDescription.setValue("");
+			return;
+		}
+		final char[] buffer = new char[1024];
+		final StringBuilder out = new StringBuilder();
+		try {
+			final Reader in = new InputStreamReader(is, "UTF-8");
+			try {
+				for (;;) {
+					int rsz = in.read(buffer, 0, buffer.length);
+					if (rsz < 0)
+						break;
+					out.append(buffer, 0, rsz);
+				}
+			} finally {
+				in.close();
+			}
+		} catch (UnsupportedEncodingException ex) {
+		} catch (IOException ex) {
+		}
+		exampleDescription.setValue(out.toString());
 	}
 
 	private void addView(final String viewName, final String buttonCaption,
@@ -99,5 +135,7 @@ public class HybridUI extends UI {
 					}
 				});
 		buttonBar.addComponent(button);
+		button.setWidth("100%");
+		button.addStyleName("menubutton");
 	}
 }

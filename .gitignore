@@ -6,3 +6,4 @@ src/main/webapp/VAADIN/widgetsets
 src/main/webapp/VAADIN/themes/hybrid/styles.css
 target
 *.launch
+rebel.xml
