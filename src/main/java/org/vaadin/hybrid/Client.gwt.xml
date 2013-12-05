@@ -13,6 +13,8 @@
     <collapse-all-properties/>
 
 	<source path="gwtrpc/client"/>
+	<source path="vaadinrpc/client"/>
+	<source path="vaadinrpc/shared"/>
 
     <!--
      To enable SuperDevMode, uncomment this line.
