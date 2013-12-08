@@ -17,6 +17,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ProvidesKey;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionChangeEvent.Handler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
 public class AddressbookEditor extends Composite {
@@ -105,8 +107,14 @@ public class AddressbookEditor extends Composite {
 						return item.getId();
 					}
 				});
-		addressList.setSelectionModel(selectionModel);
+		selectionModel.addSelectionChangeHandler(new Handler() {
 
+			@Override
+			public void onSelectionChange(SelectionChangeEvent event) {
+				updateActionVisibility(false);
+			}
+		});
+		addressList.setSelectionModel(selectionModel);
 		// First name.
 		Column<AddressTO, String> firstNameColumn = new Column<AddressTO, String>(
 				new TextCell()) {
@@ -166,7 +174,7 @@ public class AddressbookEditor extends Composite {
 				for (int i = 0; i < result.length; i++)
 					rowData.add(result[i]);
 				addressList.setRowData(rowData);
-
+				updateActionVisibility(false);
 			}
 
 			public void onFailure(Throwable caught) {
@@ -223,8 +231,22 @@ public class AddressbookEditor extends Composite {
 	}
 
 	private void updateActionVisibility(boolean editingAddress) {
-		// TODO update component enabled states
-		// TODO ensure that this method is called in appropriate events
+		boolean selected = selectionModel.getSelectedObject() != null;
+		editButton.setEnabled(selected && !editingAddress);
+		deleteButton.setEnabled(selected && !editingAddress);
+
+		// addressList.setEnabled(!editingAddress);
+		newButton.setEnabled(!editingAddress);
+
+		// formActions
+		saveButton.setEnabled(editingAddress);
+		cancelButton.setEnabled(editingAddress);
+
+		// form
+		firstName.setEnabled(editingAddress);
+		lastName.setEnabled(editingAddress);
+		emailAddress.setEnabled(editingAddress);
+		phoneNumber.setEnabled(editingAddress);
 	}
 
 	private void initForm() {
@@ -249,6 +271,7 @@ public class AddressbookEditor extends Composite {
 						lastName.setValue("");
 						emailAddress.setValue("");
 						phoneNumber.setValue("");
+						updateActionVisibility(false);
 					}
 				});
 			}
@@ -260,6 +283,7 @@ public class AddressbookEditor extends Composite {
 				lastName.setValue("");
 				emailAddress.setValue("");
 				phoneNumber.setValue("");
+				updateActionVisibility(false);
 			}
 		});
 
@@ -270,6 +294,7 @@ public class AddressbookEditor extends Composite {
 		lastName.setValue(a.getLastName());
 		emailAddress.setValue(a.getEmailAddress());
 		phoneNumber.setValue(a.getPhoneNumber());
+		updateActionVisibility(true);
 	}
 
 }
