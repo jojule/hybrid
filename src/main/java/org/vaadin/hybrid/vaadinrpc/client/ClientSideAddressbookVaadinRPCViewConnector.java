@@ -15,13 +15,20 @@ public class ClientSideAddressbookVaadinRPCViewConnector extends
 		AbstractComponentConnector {
 
 	@Override
-	public void onStateChanged(StateChangeEvent stateChangeEvent) {
-		super.onStateChanged(stateChangeEvent);
-		getWidget().updateAddressList(getState().addresses);
+	protected void init() {
+		super.init();
 
 		registerRpc(AddressbookEditorClientRpc.class, getWidget().clientRpc);
 		getWidget().setServerRpc(
 				RpcProxy.create(AddressbookEditorServerRpc.class, this));
+	}
+
+	@Override
+	public void onStateChanged(StateChangeEvent stateChangeEvent) {
+		super.onStateChanged(stateChangeEvent);
+		
+		getWidget().updateAddressList(getState().addresses);
+
 	}
 
 	@Override
