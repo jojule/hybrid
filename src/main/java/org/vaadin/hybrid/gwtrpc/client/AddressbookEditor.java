@@ -189,16 +189,15 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					service.deleteAddress(a.getId(),
-							new AsyncCallback<Object>() {
-								public void onFailure(Throwable caught) {
-									Window.alert(CONNECTION_ERROR);
-								}
+					service.deleteAddress(a.getId(), new AsyncCallback<Void>() {
+						public void onFailure(Throwable caught) {
+							Window.alert(CONNECTION_ERROR);
+						}
 
-								public void onSuccess(Object result) {
-									updateAddressList();
-								}
-							});
+						public void onSuccess(Void result) {
+							updateAddressList();
+						}
+					});
 				}
 			}
 		});
@@ -238,12 +237,12 @@ public class AddressbookEditor extends Composite {
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
 				a.setEmailAddress(emailAddress.getValue());
-				service.storeAddress(a, new AsyncCallback<Object>() {
+				service.storeAddress(a, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
 						Window.alert(CONNECTION_ERROR);
 					}
 
-					public void onSuccess(Object result) {
+					public void onSuccess(Void result) {
 						updateAddressList();
 						// TODO reselect the value in addressList
 						firstName.setValue("");
