@@ -1,10 +1,10 @@
-package org.vaadin.hybrid.gwtrpc.client;
+package org.vaadin.hybrid.gwtrpcexample.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 @RemoteServiceRelativePath("../../../addressbookrpc")
-public interface AddressbookRPCService extends RemoteService {
+public interface AddressbookService extends RemoteService {
 	
 	public AddressTO[] getAddressess();
 

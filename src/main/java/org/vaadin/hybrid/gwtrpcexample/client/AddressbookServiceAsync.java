@@ -1,8 +1,8 @@
-package org.vaadin.hybrid.gwtrpc.client;
+package org.vaadin.hybrid.gwtrpcexample.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public interface AddressbookRPCServiceAsync {
+public interface AddressbookServiceAsync {
 
 	public void getAddressess(AsyncCallback<AddressTO[]> callback);
 

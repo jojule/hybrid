@@ -1,4 +1,4 @@
-package org.vaadin.hybrid.service;
+package org.vaadin.hybrid.backend;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,12 +6,12 @@ import java.util.LinkedHashMap;
 
 import javax.servlet.http.HttpSession;
 
-public class DummyAddressbookServiceImpl implements AddressbookService {
+public class DummyAddressbookBackendImpl implements AddressbookBackend {
 
 	private final LinkedHashMap<Integer, Address> addresses = new LinkedHashMap<Integer, Address>();
 	private int nextId = 0;
 
-	public DummyAddressbookServiceImpl() {
+	public DummyAddressbookBackendImpl() {
 		initWithDummyData(300);
 	}
 
@@ -65,14 +65,14 @@ public class DummyAddressbookServiceImpl implements AddressbookService {
 
 	}
 	
-	public static AddressbookService getAddressBookService(HttpSession session) {
-		AddressbookService serv = (AddressbookService) session
-				.getAttribute(DummyAddressbookServiceImpl.class
+	public static AddressbookBackend getAddressBookService(HttpSession session) {
+		AddressbookBackend serv = (AddressbookBackend) session
+				.getAttribute(DummyAddressbookBackendImpl.class
 						.getCanonicalName());
 		if (serv == null) {
-			serv = new DummyAddressbookServiceImpl();
+			serv = new DummyAddressbookBackendImpl();
 			session.setAttribute(
-					DummyAddressbookServiceImpl.class.getCanonicalName(), serv);
+					DummyAddressbookBackendImpl.class.getCanonicalName(), serv);
 		}
 		return serv;
 	}

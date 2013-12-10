@@ -1,8 +1,8 @@
-package org.vaadin.hybrid.service;
+package org.vaadin.hybrid.backend;
 
 import java.util.Collection;
 
-public interface AddressbookService {
+public interface AddressbookBackend {
 
 	public Collection<Address> getAddressess();
 

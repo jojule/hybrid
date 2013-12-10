@@ -1,4 +1,4 @@
-package org.vaadin.hybrid.gwtrpc.client;
+package org.vaadin.hybrid.gwtrpcexample.client;
 
 import java.util.ArrayList;
 
@@ -38,8 +38,8 @@ public class AddressbookEditor extends Composite {
 	HorizontalPanel formActions = new HorizontalPanel();
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-	AddressbookRPCServiceAsync service = GWT
-			.create(AddressbookRPCService.class);
+	AddressbookServiceAsync service = GWT
+			.create(AddressbookService.class);
 
 	private static final String CONNECTION_ERROR = "Could not connect to server";
 

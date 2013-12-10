@@ -8,11 +8,9 @@ import java.io.UnsupportedEncodingException;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.hybrid.gwtrpc.ClientSideAddressbookGWTRPCView;
-import org.vaadin.hybrid.serverside.AddressbookEditor;
-import org.vaadin.hybrid.service.AddressbookService;
-import org.vaadin.hybrid.service.DummyAddressbookServiceImpl;
-import org.vaadin.hybrid.vaadinrpc.ClientSideAddressbookVaadinRPCView;
+import org.vaadin.hybrid.backend.AddressbookBackend;
+import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
+import org.vaadin.hybrid.serversideexample.AddressbookEditor;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -54,8 +52,8 @@ public class HybridUI extends UI {
 		initLayout();
 	}
 
-	public AddressbookService getAddressBookService() {
-		return DummyAddressbookServiceImpl
+	public AddressbookBackend getAddressBookService() {
+		return DummyAddressbookBackendImpl
 				.getAddressBookService(((WrappedHttpSession) getSession()
 						.getSession()).getHttpSession());
 	}
@@ -96,9 +94,9 @@ public class HybridUI extends UI {
 		navigator.addView("", HomeView.class);
 		addView("server", "Server-side", AddressbookEditor.class);
 		addView("client-gwtrpc", "Client-side GWT-RPC",
-				ClientSideAddressbookGWTRPCView.class);
-		addView("client-vaadinrpc", "Client-side Vaadin RPC",
-				ClientSideAddressbookVaadinRPCView.class);
+				org.vaadin.hybrid.gwtrpcexample.AddressbookView.class);
+		addView("client-connector", "Client-side Connector",
+				org.vaadin.hybrid.connectorexample.AddressbookView.class);
 	}
 
 	private void showDescription(Class<? extends View> viewClass) {

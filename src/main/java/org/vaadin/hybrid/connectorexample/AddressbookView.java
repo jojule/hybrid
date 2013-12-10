@@ -1,14 +1,14 @@
-package org.vaadin.hybrid.vaadinrpc;
+package org.vaadin.hybrid.connectorexample;
 
 import java.util.ArrayList;
 
-import org.vaadin.hybrid.service.Address;
-import org.vaadin.hybrid.service.AddressbookService;
-import org.vaadin.hybrid.service.DummyAddressbookServiceImpl;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressTO;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorClientRpc;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorServerRpc;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorState;
+import org.vaadin.hybrid.backend.Address;
+import org.vaadin.hybrid.backend.AddressbookBackend;
+import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
+import org.vaadin.hybrid.connectorexample.shared.AddressTO;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorClientRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorServerRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorState;
 
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -20,10 +20,10 @@ import com.vaadin.ui.AbstractComponent;
  * setting up the layout where AddressbookEditor widget would be placed in. */
 
 @SuppressWarnings("serial")
-public class ClientSideAddressbookVaadinRPCView extends AbstractComponent
+public class AddressbookView extends AbstractComponent
 		implements View, AddressbookEditorServerRpc {
 
-	public ClientSideAddressbookVaadinRPCView() {
+	public AddressbookView() {
 		setWidth("100%");
 		registerRpc(this, AddressbookEditorServerRpc.class);
 
@@ -71,8 +71,8 @@ public class ClientSideAddressbookVaadinRPCView extends AbstractComponent
 		updateAddresses();
 	}
 
-	private AddressbookService getBackend() {
-		return DummyAddressbookServiceImpl
+	private AddressbookBackend getBackend() {
+		return DummyAddressbookBackendImpl
 				.getAddressBookService(((WrappedHttpSession) VaadinSession
 						.getCurrent().getSession()).getHttpSession());
 	}

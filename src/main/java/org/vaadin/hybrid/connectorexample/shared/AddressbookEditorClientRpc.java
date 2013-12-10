@@ -1,4 +1,4 @@
-package org.vaadin.hybrid.vaadinrpc.shared;
+package org.vaadin.hybrid.connectorexample.shared;
 
 import com.vaadin.shared.communication.ClientRpc;
 

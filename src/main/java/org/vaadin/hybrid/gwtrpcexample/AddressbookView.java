@@ -1,4 +1,4 @@
-package org.vaadin.hybrid.gwtrpc;
+package org.vaadin.hybrid.gwtrpcexample;
 
 
 import com.vaadin.navigator.View;
@@ -9,10 +9,10 @@ import com.vaadin.ui.AbstractComponent;
  * setting up the layout where AddressbookEditor widget would be placed in. */
 
 @SuppressWarnings("serial")
-public class ClientSideAddressbookGWTRPCView extends AbstractComponent implements
+public class AddressbookView extends AbstractComponent implements
 		View {
 
-	public ClientSideAddressbookGWTRPCView() {
+	public AddressbookView() {
 		setWidth("100%");
 	}
 	

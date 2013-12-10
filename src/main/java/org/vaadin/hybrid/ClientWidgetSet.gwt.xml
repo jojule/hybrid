@@ -12,9 +12,9 @@
 	<!-- Merge all permutations for all browsers -->
     <collapse-all-properties/>
 
-	<source path="gwtrpc/client"/>
-	<source path="vaadinrpc/client"/>
-	<source path="vaadinrpc/shared"/>
+	<source path="gwtrpcexample/client"/>
+	<source path="connectorexample/client"/>
+	<source path="connectorexample/shared"/>
 
     <!--
      To enable SuperDevMode, uncomment this line.

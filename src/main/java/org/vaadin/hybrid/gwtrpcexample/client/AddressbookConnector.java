@@ -1,6 +1,6 @@
-package org.vaadin.hybrid.gwtrpc.client;
+package org.vaadin.hybrid.gwtrpcexample.client;
 
-import org.vaadin.hybrid.gwtrpc.ClientSideAddressbookGWTRPCView;
+import org.vaadin.hybrid.gwtrpcexample.AddressbookView;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Widget;
@@ -11,8 +11,8 @@ import com.vaadin.shared.ui.Connect;
  * would initialize AddressbookEditor widget. */
 
 @SuppressWarnings("serial")
-@Connect(ClientSideAddressbookGWTRPCView.class)
-public class ClientSideAddressbookGWTRPCViewConnector extends
+@Connect(AddressbookView.class)
+public class AddressbookConnector extends
 		AbstractComponentConnector {
 
 	protected Widget createWidget() {

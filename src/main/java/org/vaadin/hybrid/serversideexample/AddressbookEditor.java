@@ -1,8 +1,8 @@
-package org.vaadin.hybrid.serverside;
+package org.vaadin.hybrid.serversideexample;
 
 import org.vaadin.hybrid.HybridUI;
-import org.vaadin.hybrid.service.Address;
-import org.vaadin.hybrid.service.AddressbookService;
+import org.vaadin.hybrid.backend.Address;
+import org.vaadin.hybrid.backend.AddressbookBackend;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -41,7 +41,7 @@ public class AddressbookEditor extends CustomComponent implements View {
 	HorizontalLayout formActions = new HorizontalLayout();
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-	AddressbookService service = ((HybridUI) UI.getCurrent())
+	AddressbookBackend service = ((HybridUI) UI.getCurrent())
 			.getAddressBookService();
 
 	public AddressbookEditor() {

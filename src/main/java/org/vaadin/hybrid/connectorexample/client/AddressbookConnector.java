@@ -1,17 +1,18 @@
-package org.vaadin.hybrid.vaadinrpc.client;
+package org.vaadin.hybrid.connectorexample.client;
 
-import org.vaadin.hybrid.vaadinrpc.ClientSideAddressbookVaadinRPCView;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorClientRpc;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorServerRpc;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorState;
+import org.vaadin.hybrid.connectorexample.AddressbookView;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorClientRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorServerRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorState;
 
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
 import com.vaadin.client.ui.AbstractComponentConnector;
 import com.vaadin.shared.ui.Connect;
 
-@Connect(ClientSideAddressbookVaadinRPCView.class)
-public class ClientSideAddressbookVaadinRPCViewConnector extends
+@SuppressWarnings("serial")
+@Connect(AddressbookView.class)
+public class AddressbookConnector extends
 		AbstractComponentConnector {
 
 	@Override

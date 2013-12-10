@@ -1,22 +1,21 @@
-package org.vaadin.hybrid.gwtrpc;
+package org.vaadin.hybrid.gwtrpcexample;
 
 
 import java.util.Collection;
 
 import javax.servlet.annotation.WebServlet;
 
-import org.vaadin.hybrid.gwtrpc.client.AddressbookRPCService;
-import org.vaadin.hybrid.gwtrpc.client.AddressTO;
-import org.vaadin.hybrid.service.Address;
-import org.vaadin.hybrid.service.AddressbookService;
-import org.vaadin.hybrid.service.DummyAddressbookServiceImpl;
+import org.vaadin.hybrid.backend.Address;
+import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
+import org.vaadin.hybrid.gwtrpcexample.client.AddressTO;
+import org.vaadin.hybrid.gwtrpcexample.client.AddressbookService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 @WebServlet(value = "/addressbookrpc")
-public class AddressbookRPCServiceImpl extends RemoteServiceServlet implements
-		AddressbookRPCService {
+public class AddressbookServiceImpl extends RemoteServiceServlet implements
+		AddressbookService {
 
 	@Override
 	public AddressTO[] getAddressess() {
@@ -53,8 +52,8 @@ public class AddressbookRPCServiceImpl extends RemoteServiceServlet implements
 		return asAddressTO(getBackend().newAddress());
 	}
 
-	private AddressbookService getBackend() {
-		return DummyAddressbookServiceImpl
+	private org.vaadin.hybrid.backend.AddressbookBackend getBackend() {
+		return DummyAddressbookBackendImpl
 				.getAddressBookService(getThreadLocalRequest().getSession());
 	}
 

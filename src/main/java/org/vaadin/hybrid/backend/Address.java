@@ -1,4 +1,4 @@
-package org.vaadin.hybrid.service;
+package org.vaadin.hybrid.backend;
 
 public class Address {
 	

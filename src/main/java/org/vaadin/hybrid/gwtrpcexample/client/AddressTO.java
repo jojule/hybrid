@@ -1,8 +1,7 @@
-package org.vaadin.hybrid.gwtrpc.client;
+package org.vaadin.hybrid.gwtrpcexample.client;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-@SuppressWarnings("serial")
 public class AddressTO implements IsSerializable {
 
 	String firstName;

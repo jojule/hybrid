@@ -1,10 +1,10 @@
-package org.vaadin.hybrid.vaadinrpc.client;
+package org.vaadin.hybrid.connectorexample.client;
 
 import java.util.List;
 
-import org.vaadin.hybrid.vaadinrpc.shared.AddressTO;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorClientRpc;
-import org.vaadin.hybrid.vaadinrpc.shared.AddressbookEditorServerRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressTO;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorClientRpc;
+import org.vaadin.hybrid.connectorexample.shared.AddressbookEditorServerRpc;
 
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -40,6 +40,7 @@ public class AddressbookEditor extends Composite {
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
 	private AddressbookEditorServerRpc serverRpc;
+	@SuppressWarnings("serial")
 	AddressbookEditorClientRpc clientRpc = new AddressbookEditorClientRpc() {
 		// This can't be implemented by the widget class because of
 		// http://dev.vaadin.com/ticket/13056
