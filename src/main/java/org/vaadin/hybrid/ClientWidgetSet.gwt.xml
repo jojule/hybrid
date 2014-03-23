@@ -15,6 +15,9 @@
 	<source path="gwtrpc/client"/>
 	<source path="vaadinrpc/client"/>
 	<source path="vaadinrpc/shared"/>
+	<source path="vaadinrpcoffline/client"/>
+	<source path="vaadinrpcoffline/shared"/>
+
 
     <!--
      To enable SuperDevMode, uncomment this line.

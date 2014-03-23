@@ -13,6 +13,7 @@ import org.vaadin.hybrid.serverside.AddressbookEditor;
 import org.vaadin.hybrid.service.AddressbookService;
 import org.vaadin.hybrid.service.DummyAddressbookServiceImpl;
 import org.vaadin.hybrid.vaadinrpc.ClientSideAddressbookVaadinRPCView;
+import org.vaadin.hybrid.vaadinrpcoffline.ClientSideAddressbookVaadinRPCOfflineView;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -99,6 +100,9 @@ public class HybridUI extends UI {
 				ClientSideAddressbookGWTRPCView.class);
 		addView("client-vaadinrpc", "Client-side Vaadin RPC",
 				ClientSideAddressbookVaadinRPCView.class);
+		addView("client-vaadinrpc-offline",
+				"Client-side Vaadin RPC with Offline",
+				ClientSideAddressbookVaadinRPCOfflineView.class);
 	}
 
 	private void showDescription(Class<? extends View> viewClass) {
