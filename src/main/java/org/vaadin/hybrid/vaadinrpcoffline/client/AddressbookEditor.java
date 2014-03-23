@@ -2,15 +2,20 @@ package org.vaadin.hybrid.vaadinrpcoffline.client;
 
 import java.util.List;
 
+import org.vaadin.hybrid.vaadinrpcoffline.client.OfflineDetector.OfflineStateChangeHandler;
+import org.vaadin.hybrid.vaadinrpcoffline.client.OfflineDetector.OfflineStateEvent;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressTO;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressbookEditorClientRpc;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressbookEditorServerRpc;
 
 import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -41,10 +46,9 @@ public class AddressbookEditor extends Composite {
 	HorizontalPanel formActions = new HorizontalPanel();
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-	private AddressbookEditorServerRpc serverRpc;
+	private DataStore store = GWT.create(DataStore.class);
+
 	AddressbookEditorClientRpc clientRpc = new AddressbookEditorClientRpc() {
-		// This can't be implemented by the widget class because of
-		// http://dev.vaadin.com/ticket/13056
 		@Override
 		public void newAddressCallback(AddressTO newAddress) {
 			editAddress(newAddress);
@@ -67,10 +71,49 @@ public class AddressbookEditor extends Composite {
 		initAddressList();
 		initAddressListActions();
 		initForm();
+
+		updateAddressList(store.getAddresses());
+
+		OfflineDetector.get().addOnlineStateChangeHandler(
+				new OfflineStateChangeHandler() {
+					@Override
+					public void onOfflineStateChange(OfflineStateEvent event) {
+						if (event.isOffline()) {
+							// Offline event
+							if (OfflineRedirector.onOfflinePage())
+								return;
+
+							boolean goOffline = Window
+									.confirm("Do you want to go offline?");
+							if (goOffline) {
+								OfflineRedirector.redirectToOffline();
+							}
+						} else {
+							// Online event
+							if (OfflineRedirector.onOnlinePage())
+								return;
+
+							boolean goOnline = Window
+									.confirm("Do you want to go online?");
+							if (goOnline) {
+								OfflineRedirector.redirectToOnline();
+							}
+						}
+					}
+				});
 	}
 
 	public void setServerRpc(AddressbookEditorServerRpc serverRpc) {
-		this.serverRpc = serverRpc;
+		store.serverRpc = serverRpc;
+
+		if (!OfflineDetector.isOffline()) {
+			// Send any pending updates to the server
+			boolean updated = store.purgeQueue();
+			if (updated) {
+				Window.alert("Updates sent to the server");
+			}
+		}
+
 	}
 
 	private void initLayout() {
@@ -184,6 +227,11 @@ public class AddressbookEditor extends Composite {
 		// addressList.setColumnWidth(phoneNumberColumn, 20, Unit.PCT);
 	}
 
+	public void onAddressListUpdate(List<AddressTO> addresses) {
+		store.storeAddresses(addresses);
+		updateAddressList(addresses);
+	}
+
 	public void updateAddressList(List<AddressTO> addresses) {
 		int nrAddresses = addresses.size();
 		addressList.setRowCount(nrAddresses);
@@ -205,7 +253,7 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					serverRpc.deleteAddress(a.getId());
+					store.deleteAddress(a.getId());
 				}
 			}
 		});
@@ -214,11 +262,10 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					serverRpc.newAddress();
+					store.newAddress();
 				}
 			}
 		});
-
 	}
 
 	private void updateActionVisibility(boolean editingAddress) {
@@ -243,6 +290,7 @@ public class AddressbookEditor extends Composite {
 	private void initForm() {
 
 		saveButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = new AddressTO();
 				a.setId(selectionModel.getSelectedObject().getId());
@@ -250,7 +298,7 @@ public class AddressbookEditor extends Composite {
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
 				a.setEmailAddress(emailAddress.getValue());
-				serverRpc.storeAddress(a);
+				store.storeAddress(a);
 			}
 		});
 

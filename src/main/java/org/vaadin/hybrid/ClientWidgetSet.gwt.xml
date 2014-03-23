@@ -6,8 +6,11 @@
         goal "vaadin:update-widgetset".
     -->
 
-    <!-- Inherit DefaultWidgetSet -->
-    <inherits name="com.vaadin.DefaultWidgetSet" /> 
+    <!-- Inherit Vaadin which does not have an entry point -->
+    <inherits name="com.vaadin.Vaadin" /> 
+
+	<!--  Entry point which supports offline -->
+	<entry-point class="org.vaadin.hybrid.vaadinrpcoffline.client.OfflineEntry"/>
 
 	<!-- Merge all permutations for all browsers -->
     <collapse-all-properties/>

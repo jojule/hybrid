@@ -136,6 +136,7 @@
 					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
 					</hostedWebapp>
 					<noServer>true</noServer>
+					<force>true</force>
 					<!-- Remove draftCompile when project is ready -->
 					<draftCompile>false</draftCompile>
 					<compileReport>true</compileReport>

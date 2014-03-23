@@ -1,9 +1,9 @@
 package org.vaadin.hybrid.vaadinrpcoffline.client;
 
+import org.vaadin.hybrid.vaadinrpcoffline.ClientSideAddressbookVaadinRPCOfflineView;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressbookEditorClientRpc;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressbookEditorServerRpc;
 import org.vaadin.hybrid.vaadinrpcoffline.shared.AddressbookEditorState;
-import org.vaadin.hybrid.vaadinrpcoffline.ClientSideAddressbookVaadinRPCOfflineView;
 
 import com.vaadin.client.communication.RpcProxy;
 import com.vaadin.client.communication.StateChangeEvent;
@@ -26,8 +26,8 @@ public class ClientSideAddressbookVaadinRPCOfflineViewConnector extends
 	@Override
 	public void onStateChanged(StateChangeEvent stateChangeEvent) {
 		super.onStateChanged(stateChangeEvent);
-		
-		getWidget().updateAddressList(getState().addresses);
+
+		getWidget().onAddressListUpdate(getState().addresses);
 
 	}
 
