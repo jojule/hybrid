@@ -3,13 +3,14 @@ package org.vaadin.hybrid.backend;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.http.HttpSession;
 
 public class DummyAddressbookBackendImpl implements AddressbookBackend {
 
 	private final LinkedHashMap<Integer, Address> addresses = new LinkedHashMap<Integer, Address>();
-	private int nextId = 0;
+	private AtomicInteger nextId = new AtomicInteger(0);
 
 	public DummyAddressbookBackendImpl() {
 		initWithDummyData(300);
@@ -27,19 +28,15 @@ public class DummyAddressbookBackendImpl implements AddressbookBackend {
 
 	@Override
 	public void storeAddress(Address address) {
+		if (address.getId() == -1) {
+			address.setId(nextId.getAndIncrement());
+		}
 		addresses.put(address.getId(), address);
 	}
 
 	@Override
 	public void deleteAddress(int id) {
 		addresses.remove(Integer.valueOf(id));
-	}
-
-	@Override
-	public Address newAddress() {
-		Address a = new Address(nextId++);
-		storeAddress(a);
-		return a;
 	}
 
 	private void initWithDummyData(int rows) {
@@ -50,7 +47,7 @@ public class DummyAddressbookBackendImpl implements AddressbookBackend {
 				"Simons", "Verne", "Scott", "Allison", "Gates", "Rowling",
 				"Barks", "Ross", "Schneider", "Tate" };
 		for (int i = 0; i < rows; i++) {
-			Address a = newAddress();
+			Address a = new Address(nextId.getAndIncrement());
 			a.setFirstName(fnames[(int) (fnames.length * Math.random())]);
 			a.setLastName(lnames[(int) (lnames.length * Math.random())]);
 			a.setPhoneNumber("0" + ((int) (999999999 * Math.random())));
@@ -64,7 +61,7 @@ public class DummyAddressbookBackendImpl implements AddressbookBackend {
 		}
 
 	}
-	
+
 	public static AddressbookBackend getAddressBookService(HttpSession session) {
 		AddressbookBackend serv = (AddressbookBackend) session
 				.getAttribute(DummyAddressbookBackendImpl.class
@@ -76,6 +73,5 @@ public class DummyAddressbookBackendImpl implements AddressbookBackend {
 		}
 		return serv;
 	}
-
 
 }

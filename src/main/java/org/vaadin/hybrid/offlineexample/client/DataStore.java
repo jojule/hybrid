@@ -98,8 +98,6 @@ public class DataStore {
 			if ("delete".equals(operation)) {
 				deleteAddress((int) pendingCommand.get("id").isNumber()
 						.doubleValue());
-			} else if ("new".equals(operation)) {
-				newAddress();
 			} else if ("store".equals(operation)) {
 				AddressTO address = deserialize(pendingCommand.get("address")
 						.isObject());
@@ -107,16 +105,6 @@ public class DataStore {
 			}
 		}
 		return true;
-	}
-
-	public void newAddress() {
-		// TODO This whole method makes no sense
-		if (OfflineRedirector.onOfflinePage()) {
-			queueOperation("{\"op\": \"new\"}");
-		} else {
-			serverRpc.newAddress();
-			GWT.log("Executing newAddress()");
-		}
 	}
 
 	public void storeAddress(AddressTO a) {

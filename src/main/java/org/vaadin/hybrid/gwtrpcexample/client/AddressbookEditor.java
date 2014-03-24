@@ -40,8 +40,8 @@ public class AddressbookEditor extends Composite {
 	HorizontalPanel formActions = new HorizontalPanel();
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-	AddressbookServiceAsync service = GWT
-			.create(AddressbookService.class);
+	AddressbookServiceAsync service = GWT.create(AddressbookService.class);
+	private int editId;
 
 	private static final String CONNECTION_ERROR = "Could not connect to server";
 
@@ -212,19 +212,10 @@ public class AddressbookEditor extends Composite {
 
 		newButton.addClickHandler(new ClickHandler() {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
-				AddressTO a = selectionModel.getSelectedObject();
-				if (a != null) {
-					service.newAddress(new AsyncCallback<AddressTO>() {
-						public void onFailure(Throwable caught) {
-							Window.alert(CONNECTION_ERROR);
-						}
-
-						public void onSuccess(AddressTO result) {
-							editAddress(result);
-							// TODO select the result at addressList
-						}
-					});
-				}
+				selectionModel.clear();
+				AddressTO newAddress = new AddressTO();
+				newAddress.setId(-1);
+				editAddress(newAddress);
 			}
 		});
 
@@ -254,7 +245,7 @@ public class AddressbookEditor extends Composite {
 		saveButton.addClickHandler(new ClickHandler() {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = new AddressTO();
-				a.setId(selectionModel.getSelectedObject().getId());
+				a.setId(editId);
 				a.setFirstName(firstName.getValue());
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
@@ -290,6 +281,7 @@ public class AddressbookEditor extends Composite {
 	}
 
 	private void editAddress(AddressTO a) {
+		editId = a.getId();
 		firstName.setValue(a.getFirstName());
 		lastName.setValue(a.getLastName());
 		emailAddress.setValue(a.getEmailAddress());

@@ -6,6 +6,4 @@ public interface AddressbookEditorClientRpc extends ClientRpc {
 
 	public void storeAddressCallback(AddressTO newAddress);
 
-	public void newAddressCallback(AddressTO newAddress);
-
 }

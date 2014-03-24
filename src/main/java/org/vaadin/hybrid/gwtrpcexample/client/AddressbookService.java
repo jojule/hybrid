@@ -14,6 +14,4 @@ public interface AddressbookService extends RemoteService {
 
 	public void deleteAddress(int id);
 
-	public AddressTO newAddress();
-
 }

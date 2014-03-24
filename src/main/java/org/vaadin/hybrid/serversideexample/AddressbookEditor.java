@@ -118,7 +118,7 @@ public class AddressbookEditor extends CustomComponent implements View {
 		});
 		newButton.addClickListener(new Button.ClickListener() {
 			public void buttonClick(ClickEvent event) {
-				Address a = service.newAddress();
+				Address a = new Address(-1);
 				editAddress(a);
 			}
 		});

@@ -8,6 +8,4 @@ public interface AddressbookEditorServerRpc extends ServerRpc {
 
 	public void deleteAddress(int id);
 
-	public void newAddress();
-
 }

@@ -12,6 +12,4 @@ public interface AddressbookBackend {
 
 	public void deleteAddress(int id);
 
-	public Address newAddress();
-
 }
