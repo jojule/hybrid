@@ -1,15 +1,20 @@
-package org.vaadin.hybrid.gwtrpcexample.client;
+package org.vaadin.hybrid.offlineexample.client;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import org.vaadin.hybrid.offlineexample.client.OfflineDetector.OfflineStateChangeHandler;
+import org.vaadin.hybrid.offlineexample.client.OfflineDetector.OfflineStateEvent;
+import org.vaadin.hybrid.offlineexample.shared.AddressTO;
+import org.vaadin.hybrid.offlineexample.shared.AddressbookEditorClientRpc;
+import org.vaadin.hybrid.offlineexample.shared.AddressbookEditorServerRpc;
 
 import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.DataGrid;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -40,18 +45,74 @@ public class AddressbookEditor extends Composite {
 	HorizontalPanel formActions = new HorizontalPanel();
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
-	AddressbookServiceAsync service = GWT
-			.create(AddressbookService.class);
+	private DataStore store = GWT.create(DataStore.class);
 
-	private static final String CONNECTION_ERROR = "Could not connect to server";
+	AddressbookEditorClientRpc clientRpc = new AddressbookEditorClientRpc() {
+		@Override
+		public void newAddressCallback(AddressTO newAddress) {
+			editAddress(newAddress);
+		}
+
+		@Override
+		public void storeAddressCallback(AddressTO newAddress) {
+			// TODO reselect the value in addressList
+			firstName.setValue("");
+			lastName.setValue("");
+			emailAddress.setValue("");
+			phoneNumber.setValue("");
+			updateActionVisibility(false);
+		}
+	};
 
 	public AddressbookEditor() {
 		initLayout();
 		initWidget(layout);
 		initAddressList();
-		updateAddressList();
 		initAddressListActions();
 		initForm();
+
+		updateAddressList(store.getAddresses());
+
+		OfflineDetector.get().addOnlineStateChangeHandler(
+				new OfflineStateChangeHandler() {
+					@Override
+					public void onOfflineStateChange(OfflineStateEvent event) {
+						if (event.isOffline()) {
+							// Offline event
+							if (OfflineRedirector.onOfflinePage())
+								return;
+
+							boolean goOffline = Window
+									.confirm("Do you want to go offline?");
+							if (goOffline) {
+								OfflineRedirector.redirectToOffline();
+							}
+						} else {
+							// Online event
+							if (OfflineRedirector.onOnlinePage())
+								return;
+
+							boolean goOnline = Window
+									.confirm("Do you want to go online?");
+							if (goOnline) {
+								OfflineRedirector.redirectToOnline();
+							}
+						}
+					}
+				});
+	}
+
+	public void setServerRpc(AddressbookEditorServerRpc serverRpc) {
+		store.serverRpc = serverRpc;
+
+		if (!OfflineDetector.isOffline()) {
+			// Send any pending updates to the server
+			boolean updated = store.purgeQueue();
+			if (updated) {
+				Window.alert("Updates sent to the server");
+			}
+		}
+
 	}
 
 	private void initLayout() {
@@ -115,6 +176,7 @@ public class AddressbookEditor extends Composite {
 			}
 		});
 		addressList.setSelectionModel(selectionModel);
+
 		// First name.
 		Column<AddressTO, String> firstNameColumn = new Column<AddressTO, String>(
 				new TextCell()) {
@@ -164,23 +226,16 @@ public class AddressbookEditor extends Composite {
 		// addressList.setColumnWidth(phoneNumberColumn, 20, Unit.PCT);
 	}
 
-	private void updateAddressList() {
+	public void onAddressListUpdate(List<AddressTO> addresses) {
+		store.storeAddresses(addresses);
+		updateAddressList(addresses);
+	}
 
-		service.getAddressess(new AsyncCallback<AddressTO[]>() {
-			public void onSuccess(AddressTO[] result) {
-				addressList.setRowCount(result.length);
-				ArrayList<AddressTO> rowData = new ArrayList<AddressTO>(
-						result.length);
-				for (int i = 0; i < result.length; i++)
-					rowData.add(result[i]);
-				addressList.setRowData(rowData);
-				updateActionVisibility(false);
-			}
-
-			public void onFailure(Throwable caught) {
-				Window.alert(CONNECTION_ERROR);
-			}
-		});
+	public void updateAddressList(List<AddressTO> addresses) {
+		int nrAddresses = addresses.size();
+		addressList.setRowCount(nrAddresses);
+		addressList.setRowData(addresses);
+		updateActionVisibility(false);
 	}
 
 	private void initAddressListActions() {
@@ -197,15 +252,7 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					service.deleteAddress(a.getId(), new AsyncCallback<Void>() {
-						public void onFailure(Throwable caught) {
-							Window.alert(CONNECTION_ERROR);
-						}
-
-						public void onSuccess(Void result) {
-							updateAddressList();
-						}
-					});
+					store.deleteAddress(a.getId());
 				}
 			}
 		});
@@ -214,20 +261,10 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					service.newAddress(new AsyncCallback<AddressTO>() {
-						public void onFailure(Throwable caught) {
-							Window.alert(CONNECTION_ERROR);
-						}
-
-						public void onSuccess(AddressTO result) {
-							editAddress(result);
-							// TODO select the result at addressList
-						}
-					});
+					store.newAddress();
 				}
 			}
 		});
-
 	}
 
 	private void updateActionVisibility(boolean editingAddress) {
@@ -252,6 +289,7 @@ public class AddressbookEditor extends Composite {
 	private void initForm() {
 
 		saveButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = new AddressTO();
 				a.setId(selectionModel.getSelectedObject().getId());
@@ -259,21 +297,7 @@ public class AddressbookEditor extends Composite {
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
 				a.setEmailAddress(emailAddress.getValue());
-				service.storeAddress(a, new AsyncCallback<Void>() {
-					public void onFailure(Throwable caught) {
-						Window.alert(CONNECTION_ERROR);
-					}
-
-					public void onSuccess(Void result) {
-						updateAddressList();
-						// TODO reselect the value in addressList
-						firstName.setValue("");
-						lastName.setValue("");
-						emailAddress.setValue("");
-						phoneNumber.setValue("");
-						updateActionVisibility(false);
-					}
-				});
+				store.storeAddress(a);
 			}
 		});
 

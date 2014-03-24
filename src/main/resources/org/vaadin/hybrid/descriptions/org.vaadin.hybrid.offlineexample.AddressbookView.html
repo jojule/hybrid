@@ -1,0 +1,16 @@
+<h1>Client-side Connector Example with Offline</h1>
+
+<p>This example has been completely implemented on the client-side.</p>
+
+<p>It consists of the following classes:
+<ul>
+	<li>AddressbookEditor: UI implementation compiled to JavaScript. Uses RPC to communicate with ClientSideAddressbookGWTRPCView.</li>
+	<li>AddressbookEditorServerRpc: RPC interface which AddressbookEditor uses to communicate with ClientSideAddressbookGWTRPCView (client to server).</li>
+	<li>AddressbookEditorClientRpc: RPC interface which ClientSideAddressbookGWTRPCView uses to communicate with AddressbookEditor (server to client).</li>
+	<li>AddressbookEditorState: Contains addresses which are automatically synchronized (server to client).</li>
+	<li>AddressbookView: Server-side view that puts the widget on the page. Handles RPC calls from AddressBookEditor and forwards to the backend</li>
+	<li>AddressbookConnector: Initializer for the client-side widget.</li>
+</ul>
+</p>
+
+

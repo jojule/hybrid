@@ -1,17 +1,5 @@
 package org.vaadin.hybrid;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-
-import javax.servlet.annotation.WebServlet;
-
-import org.vaadin.hybrid.backend.AddressbookBackend;
-import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
-import org.vaadin.hybrid.serversideexample.AddressbookEditor;
-
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
@@ -21,14 +9,14 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WrappedHttpSession;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.NativeButton;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import org.vaadin.hybrid.backend.AddressbookBackend;
+import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
+import org.vaadin.hybrid.serversideexample.AddressbookEditor;
+
+import javax.servlet.annotation.WebServlet;
+import java.io.*;
 
 @Theme("hybrid")
 @SuppressWarnings("serial")
@@ -55,7 +43,7 @@ public class HybridUI extends UI {
 	public AddressbookBackend getAddressBookService() {
 		return DummyAddressbookBackendImpl
 				.getAddressBookService(((WrappedHttpSession) getSession()
-						.getSession()).getHttpSession());
+                        .getSession()).getHttpSession());
 	}
 
 	private void initLayout() {
@@ -93,10 +81,13 @@ public class HybridUI extends UI {
 
 		navigator.addView("", HomeView.class);
 		addView("server", "Server-side", AddressbookEditor.class);
-		addView("client-gwtrpc", "Client-side GWT-RPC",
-				org.vaadin.hybrid.gwtrpcexample.AddressbookView.class);
-		addView("client-connector", "Client-side Connector",
-				org.vaadin.hybrid.connectorexample.AddressbookView.class);
+		addView("gwtrpc", "GWT-RPC",
+        org.vaadin.hybrid.gwtrpcexample.AddressbookView.class);
+		addView("connector", "Connector",
+                org.vaadin.hybrid.connectorexample.AddressbookView.class);
+		addView("offline",
+				"Offline",
+                org.vaadin.hybrid.offlineexample.AddressbookView.class);
 	}
 
 	private void showDescription(Class<? extends View> viewClass) {

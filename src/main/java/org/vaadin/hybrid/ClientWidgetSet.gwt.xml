@@ -6,8 +6,11 @@
         goal "vaadin:update-widgetset".
     -->
 
-    <!-- Inherit DefaultWidgetSet -->
-    <inherits name="com.vaadin.DefaultWidgetSet" /> 
+    <!-- Inherit Vaadin which does not have an entry point -->
+    <inherits name="com.vaadin.Vaadin" /> 
+
+	<!--  Entry point which supports offline -->
+	<entry-point class="org.vaadin.hybrid.offlineexample.client.OfflineEntry"/>
 
 	<!-- Merge all permutations for all browsers -->
     <collapse-all-properties/>
@@ -15,6 +18,8 @@
 	<source path="gwtrpcexample/client"/>
 	<source path="connectorexample/client"/>
 	<source path="connectorexample/shared"/>
+	<source path="offlineexample/client"/>
+	<source path="offlineexample/shared"/>
 
     <!--
      To enable SuperDevMode, uncomment this line.
@@ -24,4 +29,6 @@
     -->
     <set-configuration-property name="devModeRedirectEnabled" value="true" />
 
+
+    <inherits name="com.vaadin.DefaultWidgetSet" />
 </module>
