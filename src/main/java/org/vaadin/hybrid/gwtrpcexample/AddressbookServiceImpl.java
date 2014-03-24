@@ -47,11 +47,6 @@ public class AddressbookServiceImpl extends RemoteServiceServlet implements
 		getBackend().deleteAddress(id);
 	}
 
-	@Override
-	public AddressTO newAddress() {
-		return asAddressTO(getBackend().newAddress());
-	}
-
 	private org.vaadin.hybrid.backend.AddressbookBackend getBackend() {
 		return DummyAddressbookBackendImpl
 				.getAddressBookService(getThreadLocalRequest().getSession());

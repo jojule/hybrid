@@ -42,14 +42,11 @@ public class AddressbookEditor extends Composite {
 	Button saveButton = new Button("Save");
 	Button cancelButton = new Button("Cancel");
 	private AddressbookEditorServerRpc serverRpc;
+	private int editId;
 
 	AddressbookEditorClientRpc clientRpc = new AddressbookEditorClientRpc() {
 		// This can't be implemented by the widget class because of
 		// http://dev.vaadin.com/ticket/13056
-		@Override
-		public void newAddressCallback(AddressTO newAddress) {
-			editAddress(newAddress);
-		}
 
 		@Override
 		public void storeAddressCallback(AddressTO newAddress) {
@@ -213,10 +210,10 @@ public class AddressbookEditor extends Composite {
 
 		newButton.addClickHandler(new ClickHandler() {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
-				AddressTO a = selectionModel.getSelectedObject();
-				if (a != null) {
-					serverRpc.newAddress();
-				}
+				selectionModel.clear();
+				AddressTO newAddress = new AddressTO();
+				newAddress.setId(-1);
+				editAddress(newAddress);
 			}
 		});
 
@@ -244,9 +241,10 @@ public class AddressbookEditor extends Composite {
 	private void initForm() {
 
 		saveButton.addClickHandler(new ClickHandler() {
+
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = new AddressTO();
-				a.setId(selectionModel.getSelectedObject().getId());
+				a.setId(editId);
 				a.setFirstName(firstName.getValue());
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
@@ -268,6 +266,7 @@ public class AddressbookEditor extends Composite {
 	}
 
 	private void editAddress(AddressTO a) {
+		editId = a.getId();
 		firstName.setValue(a.getFirstName());
 		lastName.setValue(a.getLastName());
 		emailAddress.setValue(a.getEmailAddress());
