@@ -52,12 +52,8 @@ public class AddressbookEditor extends Composite {
 
 		@Override
 		public void storeAddressCallback(AddressTO newAddress) {
+			clearForm();
 			// TODO reselect the value in addressList
-			firstName.setValue("");
-			lastName.setValue("");
-			emailAddress.setValue("");
-			phoneNumber.setValue("");
-			updateActionVisibility(false);
 		}
 	};
 
@@ -102,7 +98,7 @@ public class AddressbookEditor extends Composite {
 	public void setServerRpc(AddressbookEditorServerRpc serverRpc) {
 		store.serverRpc = serverRpc;
 
-		if (!OfflineDetector.isOffline()) {
+		if (!OfflineRedirector.onOfflinePage()) {
 			// Send any pending updates to the server
 			boolean updated = store.purgeQueue();
 			if (updated) {
@@ -169,7 +165,7 @@ public class AddressbookEditor extends Composite {
 
 			@Override
 			public void onSelectionChange(SelectionChangeEvent event) {
-				updateActionVisibility(false);
+				clearForm();
 			}
 		});
 		addressList.setSelectionModel(selectionModel);
@@ -249,7 +245,9 @@ public class AddressbookEditor extends Composite {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
 				AddressTO a = selectionModel.getSelectedObject();
 				if (a != null) {
-					store.deleteAddress(a.getId());
+					if (!store.deleteAddress(a.getId())) {
+						updateAddressList(store.getAddresses());
+					}
 				}
 			}
 		});
@@ -294,20 +292,27 @@ public class AddressbookEditor extends Composite {
 				a.setLastName(lastName.getValue());
 				a.setPhoneNumber(phoneNumber.getValue());
 				a.setEmailAddress(emailAddress.getValue());
-				store.storeAddress(a);
+				if (!store.storeAddress(a)) {
+					clearForm();
+					updateAddressList(store.getAddresses());
+				}
 			}
 		});
 
 		cancelButton.addClickHandler(new ClickHandler() {
 			public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
-				firstName.setValue("");
-				lastName.setValue("");
-				emailAddress.setValue("");
-				phoneNumber.setValue("");
-				updateActionVisibility(false);
+				clearForm();
 			}
 		});
 
+	}
+
+	protected void clearForm() {
+		firstName.setValue("");
+		lastName.setValue("");
+		emailAddress.setValue("");
+		phoneNumber.setValue("");
+		updateActionVisibility(false);
 	}
 
 	private void editAddress(AddressTO a) {

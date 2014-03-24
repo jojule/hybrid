@@ -28,12 +28,15 @@ public class DataStore {
 		}
 	}
 
-	public void deleteAddress(final int id) {
+	public boolean deleteAddress(final int id) {
 		if (OfflineRedirector.onOfflinePage()) {
 			queueOperation("{\"op\": \"delete\", \"id\": " + id + "}");
+			deleteLocalAddress(id);
+			return false;
 		} else {
 			serverRpc.deleteAddress(id);
 			GWT.log("Executing deleteAddress(" + id + ")");
+			return true;
 		}
 	}
 
@@ -107,14 +110,51 @@ public class DataStore {
 		return true;
 	}
 
-	public void storeAddress(AddressTO a) {
+	/**
+	 * @param a
+	 *            the address to store
+	 * @return true if the value was sent to the server, false if it was queued
+	 */
+	public boolean storeAddress(AddressTO a) {
 		if (OfflineRedirector.onOfflinePage()) {
 			queueOperation("{\"op\": \"store\", \"address\": " + serialize(a)
 					+ "}");
+			updateLocalAddress(a);
+			return false;
 		} else {
 			serverRpc.storeAddress(a);
 			GWT.log("Executing storeAddress(" + serialize(a) + ")");
+			return true;
 		}
+	}
+
+	private void updateLocalAddress(AddressTO a) {
+		boolean found = false;
+		List<AddressTO> addresses = getAddresses();
+		for (int i = 0; i < addresses.size(); i++) {
+			AddressTO address = addresses.get(i);
+			if (address.getId() == a.getId()) {
+				addresses.set(i, a);
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+			addresses.add(a);
+
+		storeAddresses(addresses);
+	}
+
+	private void deleteLocalAddress(int id) {
+		List<AddressTO> addresses = getAddresses();
+		for (int i = 0; i < addresses.size(); i++) {
+			AddressTO address = addresses.get(i);
+			if (address.getId() == id) {
+				addresses.remove(i);
+				break;
+			}
+		}
+		storeAddresses(addresses);
 	}
 
 	private JSONObject serialize(AddressTO a) {
