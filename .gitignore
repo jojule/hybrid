@@ -7,3 +7,5 @@ src/main/webapp/VAADIN/themes/hybrid/styles.css
 target
 *.launch
 rebel.xml
+.idea
+hybrid.iml
