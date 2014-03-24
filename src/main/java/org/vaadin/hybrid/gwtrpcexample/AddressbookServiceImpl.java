@@ -30,20 +30,20 @@ public class AddressbookServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public AddressTO getAddress(int id) {
-		// TODO Potential security problem as we do allow any id - not just ones listed before
+		// TODO Authentication and authorisation are not implemented - anyone can call this
 		return asAddressTO(getBackend().getAddress(id));
 	}
 
 	@Override
 	public void storeAddress(AddressTO address) {
-		// TODO Potential security problem as we do allow any id - not just ones listed before
+        // TODO Authentication and authorisation are not implemented - anyone can call this
 		Address a = new Address(address.getId(), address.getFirstName(), address.getLastName(), address.getPhoneNumber(), address.getEmailAddress());
 		getBackend().storeAddress(a);
 	}
 
 	@Override
 	public void deleteAddress(int id) {
-		// TODO Potential security problem as we do allow any id - not just ones listed before
+        // TODO Authentication and authorisation are not implemented - anyone can call this
 		getBackend().deleteAddress(id);
 	}
 
