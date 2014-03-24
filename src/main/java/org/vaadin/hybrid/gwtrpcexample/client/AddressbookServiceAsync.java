@@ -12,6 +12,5 @@ public interface AddressbookServiceAsync {
 
 	public void deleteAddress(int id, AsyncCallback<Void> callback);
 
-	public void newAddress(AsyncCallback<AddressTO> callback);
 
 }

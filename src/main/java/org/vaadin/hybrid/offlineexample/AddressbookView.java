@@ -64,13 +64,6 @@ public class AddressbookView extends AbstractComponent
 		updateAddresses();
 	}
 
-	@Override
-	public void newAddress() {
-		getRpcProxy(AddressbookEditorClientRpc.class).newAddressCallback(
-				asAddressTO(getBackend().newAddress()));
-		updateAddresses();
-	}
-
 	private AddressbookBackend getBackend() {
 		return DummyAddressbookBackendImpl
 				.getAddressBookService(((WrappedHttpSession) VaadinSession
