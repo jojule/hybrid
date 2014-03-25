@@ -1,0 +1,13 @@
+CACHE MANIFEST
+# 2014-03-25:v1
+
+CACHE:
+offline.html
+VAADIN/vaadinBootstrap.js
+VAADIN/themes/hybrid/favicon.ico
+VAADIN/themes/hybrid/styles.css
+VAADIN/widgetsets/org.vaadin.hybrid.Client/org.vaadin.hybrid.Client.nocache.js
+VAADIN/widgetsets/org.vaadin.hybrid.Client/clear.cache.gif
+
+NETWORK:
+*
