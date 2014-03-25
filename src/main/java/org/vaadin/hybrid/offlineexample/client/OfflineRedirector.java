@@ -4,6 +4,9 @@ import com.google.gwt.user.client.Window.Location;
 
 public class OfflineRedirector {
 
+    private static String ONLINE_PAGE = "/";
+    private static String OFFLINE_PAGE = "/offline.html";
+
 	/**
 	 * Redirects the browser to the online URL if not already at that URL
 	 * 
@@ -11,7 +14,7 @@ public class OfflineRedirector {
 	 */
 	public static boolean redirectToOnline() {
 		if (!onOnlinePage()) {
-			String onlineUrl = Location.createUrlBuilder().setPath("/")
+			String onlineUrl = Location.createUrlBuilder().setPath(ONLINE_PAGE)
 					.buildString();
 			Location.replace(onlineUrl);
 			return true;
@@ -27,7 +30,7 @@ public class OfflineRedirector {
 	public static boolean redirectToOffline() {
 		if (!onOfflinePage()) {
 			String offlineUrl = Location.createUrlBuilder()
-					.setPath("/offline/").buildString();
+					.setPath(OFFLINE_PAGE).buildString();
 			Location.replace(offlineUrl);
 			return true;
 		}
@@ -35,11 +38,11 @@ public class OfflineRedirector {
 	}
 
 	public static boolean onOfflinePage() {
-		return Location.getPath().equals("/offline.html");
+		return Location.getPath().equals(OFFLINE_PAGE);
 	}
 
 	public static boolean onOnlinePage() {
-		return Location.getPath().equals("/");
+		return Location.getPath().equals(ONLINE_PAGE);
 	}
 
 }
