@@ -35,7 +35,7 @@ public class OfflineRedirector {
 	}
 
 	public static boolean onOfflinePage() {
-		return Location.getPath().equals("/offline/");
+		return Location.getPath().equals("/offline.html");
 	}
 
 	public static boolean onOnlinePage() {

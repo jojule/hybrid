@@ -1,6 +1,7 @@
 package org.vaadin.hybrid.offlineexample.client;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.vaadin.client.ApplicationConfiguration;
 
@@ -8,32 +9,17 @@ public class OfflineEntry extends ApplicationConfiguration {
 
 	@Override
 	public void onModuleLoad() {
-		if (OfflineDetector.isOffline()) {
-			// Offline, redirect to /offline to start offline version
-			if (OfflineRedirector.redirectToOffline()) {
-				return;
-			}
-		}
 
+        // Offline version is selected by going to /offline.html
 		if (OfflineRedirector.onOfflinePage()) {
-			startOfflineVersion();
+
+            // Start offline by placing the AddressbookEditor on rootPanel
+            RootPanel rootPanel = RootPanel.get("offlineui");
+            rootPanel.add(new AddressbookEditor());
 		} else {
 			// Start online version
 			super.onModuleLoad();
 		}
 
-	}
-
-	private void startOfflineVersion() {
-		// Find the Vaadin root div
-		Element mainDiv = RootPanel.getBodyElement().getFirstChildElement();
-		RootPanel rootPanel = RootPanel.get(mainDiv.getId());
-		while (mainDiv.hasChildNodes())
-			mainDiv.removeChild(mainDiv.getFirstChild());
-
-		// Hack to make layout the same
-		mainDiv.setAttribute("style", "float: left");
-
-		rootPanel.add(new AddressbookEditor());
 	}
 }

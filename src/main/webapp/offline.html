@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Addressbook Example Offline Mode</title>
+    <link type="text/css" rel="stylesheet" href="VAADIN/themes/hybrid/styles.css">
+    <script type="text/javascript" language="javascript"
+            src="VAADIN/widgetsets/org.vaadin.hybrid.Client/org.vaadin.hybrid.Client.nocache.js"></script>
+</head>
+<body style="margin: 0">
+
+<!-- Menu is just a copy from the HybridUI generated menu give a feeling of being in the same application -->
+<div class=" v-app hybrid">
+    <div class="v-verticallayout v-layout v-vertical v-widget v-has-width" style="width: 100%;">
+        <div class="v-slot">
+            <div class="v-horizontallayout v-layout v-horizontal v-widget v-has-width" style="width: 100%;">
+                <div class="v-expand" style="padding-left: 0px;">
+                    <div class="v-slot v-slot-menubutton" style="width: 25%; margin-left: 0px;">
+                        <button type="button" disabled
+                                class="v-nativebutton v-widget menubutton v-nativebutton-menubutton v-has-width"
+                                tabindex="0" style="width: 100%;"><span
+                                class="v-nativebutton-caption">Server-side</span></button>
+                    </div>
+                    <div class="v-slot v-slot-menubutton" style="width: 25%;">
+                        <button type="button" disabled
+                                class="v-nativebutton v-widget menubutton v-nativebutton-menubutton v-has-width"
+                                tabindex="0" style="width: 100%;"><span
+                                class="v-nativebutton-caption">GWT-RPC</span></button>
+                    </div>
+                    <div class="v-slot v-slot-menubutton" style="width: 25%;">
+                        <button type="button" disabled
+                                class="v-nativebutton v-widget menubutton v-nativebutton-menubutton v-has-width"
+                                tabindex="0" style="width: 100%;"><span
+                                class="v-nativebutton-caption">Connector</span></button>
+                    </div>
+                    <div class="v-slot v-slot-menubutton" style="width: 25%;">
+                        <button type="button" onclick="window.location = '/#!offline'"
+                                class="v-nativebutton v-widget menubutton v-nativebutton-menubutton v-has-width"
+                                tabindex="0" style="width: 100%;"><span
+                                class="v-nativebutton-caption">Offline</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button onclick="window.location='/#!offline'" style="float:right; margin: 40px;">Go Online</button>
+
+<!-- rootPanel where the AddressbookEditor widget is placed -->
+<div class="v-slot" id="offlineui">
+</div>
+
+</body>
+</html>

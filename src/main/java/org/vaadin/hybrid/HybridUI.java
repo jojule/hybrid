@@ -15,7 +15,10 @@ import org.vaadin.hybrid.backend.AddressbookBackend;
 import org.vaadin.hybrid.backend.DummyAddressbookBackendImpl;
 import org.vaadin.hybrid.serversideexample.AddressbookEditor;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 
 @Theme("hybrid")
@@ -25,7 +28,15 @@ public class HybridUI extends UI {
 	@WebServlet(value = "/*")
 	@VaadinServletConfiguration(productionMode = false, ui = HybridUI.class, widgetset = "org.vaadin.hybrid.Client")
 	public static class Servlet extends VaadinServlet {
-	}
+        @Override
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            String path = request.getPathInfo();
+            if (path.startsWith("/offline")) {
+                getServletContext().getNamedDispatcher("default").forward(request, response);
+            }
+                super.service(request, response);
+        }
+    }
 
 	final VerticalLayout mainLayout = new VerticalLayout();
 	final HorizontalLayout buttonBar = new HorizontalLayout();
