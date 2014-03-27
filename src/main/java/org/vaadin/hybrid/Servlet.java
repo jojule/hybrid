@@ -24,6 +24,7 @@ public class Servlet extends VaadinServlet {
         String path = request.getPathInfo();
         if (path.equals("/offline.html") || path.equals("/hybrid.appcache")) {
             getServletContext().getNamedDispatcher("default").forward(request, response);
+            return;
         }
         super.service(request, response);
     }
